@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Middleware\isAdminMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +15,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::group(
+    [
+        'prefix' => LaravelLocalization::setLocale(),
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+    ], function () {
+
+    Route::group([
+        'Middleware'=>['auth','isAdmin']
+    ], function () {
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        });
+    });
+
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+
 });
