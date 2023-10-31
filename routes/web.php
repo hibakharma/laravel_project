@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\Admin\AdminController;
+
 use App\Http\Middleware\isAdminMiddleware;
 
 /*
@@ -33,10 +35,14 @@ Route::group(
             return view('admin.dashboard');
         });
     });
+    Route::get('dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
+
+    Route::resource('/categories', \App\Http\Controllers\Admin\CategoryController::class);
 
     Route::get('/', function () {
         return view('welcome');
     });
+
 
 
 });

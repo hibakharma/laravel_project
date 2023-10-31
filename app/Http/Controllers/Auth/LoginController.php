@@ -15,14 +15,15 @@ class LoginController extends Controller
 
 //    protected $redirectTo = RouteServiceProvider::HOME;
 
-    public function redirectTo()
+    public function authenticated()
     {
+
         if (Auth::user()->is_admin == 1) {
 
-            return '/dashboard';
+            return redirect()->route('dashboard')->with('success','login Successfully');
 
-        }else{
-            return '/';
+        } else {
+            return redirect('/')->with('success','login Successfully');
         }
     }
 
